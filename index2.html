@@ -18,7 +18,7 @@
 </head>
 <body>
 <div class="container">
-    <h2> 图书收藏管理系统</h2>
+    <h2>📚 图书收藏管理系统</h2>
     <div class="tip‑error" id="errorTip"></div>
     <div class="form‑item">
         <label>书名：</label>
@@ -51,7 +51,6 @@
 </div>
 
 <script>
-    // 初始化空数组，暂时未接入本地存储
     let bookList = [];
     let editIndex = null;
 
@@ -90,11 +89,23 @@
         btnCancel.style.display = "none";
     }
 
-    window.openEdit = function(idx){}
-    window.deleteItem = function(idx){}
-    btnAdd.onclick = function(){}
-    btnCancel.onclick = clearForm;
+    btnAdd.onclick = function(){
+        const name = nameInput.value.trim();
+        const author = authorInput.value.trim();
+        const score = Number(scoreInput.value.trim());
+        bookList.push({name,author,score});
+        render();
+        clearForm();
+    }
 
+    window.openEdit = function(idx){}
+
+    window.deleteItem = function(idx){
+        bookList.splice(idx,1);
+        render();
+    }
+
+    btnCancel.onclick = clearForm;
     render();
 </script>
 </body>
