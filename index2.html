@@ -51,7 +51,7 @@
 </div>
 
 <script>
-    let bookList = [];
+    let bookList = JSON.parse(localStorage.getItem("bookList")) || [];
     let editIndex = null;
 
     const nameInput = document.getElementById("bookName");
@@ -61,6 +61,10 @@
     const btnCancel = document.getElementById("btnCancel");
     const tableBody = document.getElementById("tableBody");
     const errorTip = document.getElementById("errorTip");
+
+    function saveStorage(){
+        localStorage.setItem("bookList",JSON.stringify(bookList));
+    }
 
     function render(){
         tableBody.innerHTML = "";
@@ -93,15 +97,34 @@
         const name = nameInput.value.trim();
         const author = authorInput.value.trim();
         const score = Number(scoreInput.value.trim());
-        bookList.push({name,author,score});
+        if(!name){
+            errorTip.innerText = "错误：书名不能为空！";
+            return;
+        }
+        errorTip.innerText = "";
+        if(editIndex === null){
+            bookList.push({name,author,score});
+        }else{
+            bookList[editIndex] = {name,author,score};
+        }
+        saveStorage();
         render();
         clearForm();
     }
 
-    window.openEdit = function(idx){}
+    window.openEdit = function(idx){
+        editIndex = idx;
+        const data = bookList[idx];
+        nameInput.value = data.name;
+        authorInput.value = data.author;
+        scoreInput.value = data.score;
+        btnAdd.innerText = "保存修改";
+        btnCancel.style.display = "inline‑block";
+    }
 
     window.deleteItem = function(idx){
         bookList.splice(idx,1);
+        saveStorage();
         render();
     }
 
