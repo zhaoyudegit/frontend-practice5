@@ -2,13 +2,14 @@ const form = document.querySelector('#add-form');
 const input = document.querySelector('#task-input');
 const tip = document.querySelector('#tip');
 const list = document.querySelector('#task-list');
-let tasks = [];
-
-// 过滤相关变量
 const filters = document.querySelector('.filters');
-let currentFilter = 'all'; // all / active / done
+let currentFilter = 'all';
 
-// 重写render
+// 从本地存储读取任务，没有数据则为空数组
+let tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+// 保存函数
+const save = () => localStorage.setItem('tasks', JSON.stringify(tasks));
+
 const render = () => {
   list.innerHTML = '';
   const shown = tasks.filter(t =>
@@ -27,6 +28,7 @@ const render = () => {
     if (task.done) li.classList.add('done');
     li.addEventListener('click', () => {
       task.done = !task.done;
+      save(); // 修改任务状态后保存
       render();
     });
     list.appendChild(li);
@@ -41,6 +43,7 @@ form.addEventListener('submit', (e) => {
     return;
   }
   tasks.push({ text: text, done: false });
+  save(); // 添加任务后保存
   tip.textContent = '';
   input.value = '';
   render();
@@ -53,4 +56,3 @@ filters.addEventListener('click', (e) => {
 });
 
 render();
-
