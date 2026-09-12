@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh‑CN">
+<head>
+    <meta charset="UTF‑8">
+    <title>图书收藏管理</title>
+    <style>
+        * {box‑sizing: border‑box;font‑family:Microsoft Yahei;}
+        .container{max‑width:700px;margin:30px auto;padding:0 20px;}
+        .form‑item{margin:10px 0;}
+        input{padding:6px;width:220px;font‑size:14px;}
+        button{padding:6px 12px;margin:2px;border:none;background:#2478ff;color:white;border‑radius:4px;cursor:pointer;}
+        .del{background:#ed4040;}
+        .edit{background:#ffa600;}
+        .tip‑error{color:#ed4040;height:22px;font‑size:14px;}
+        table{width:100%;margin‑top:20px;border‑collapse:collapse;}
+        th,td{border:1px solid #ccc;padding:8px;text‑align:center;}
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2> 图书收藏管理系统</h2>
+    <div class="tip‑error" id="errorTip"></div>
+    <div class="form‑item">
+        <label>书名：</label>
+        <input type="text" id="bookName" placeholder="请输入书名">
+    </div>
+    <div class="form‑item">
+        <label>作者：</label>
+        <input type="text" id="author" placeholder="请输入作者">
+    </div>
+    <div class="form‑item">
+        <label>评分：</label>
+        <input type="number" min="0" max="10" id="score" placeholder="0‑10">
+    </div>
+    <div class="form‑item">
+        <button id="btnAdd">新增图书</button>
+        <button id="btnCancel" style="background:#888;display:none">取消编辑</button>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>书名</th>
+            <th>作者</th>
+            <th>评分</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody id="tableBody">
+        </tbody>
+    </table>
+</div>
+
+<script>
+    // 初始化空数组，暂时未接入本地存储
+    let bookList = [];
+    let editIndex = null;
+
+    const nameInput = document.getElementById("bookName");
+    const authorInput = document.getElementById("author");
+    const scoreInput = document.getElementById("score");
+    const btnAdd = document.getElementById("btnAdd");
+    const btnCancel = document.getElementById("btnCancel");
+    const tableBody = document.getElementById("tableBody");
+    const errorTip = document.getElementById("errorTip");
+
+    function render(){
+        tableBody.innerHTML = "";
+        bookList.forEach((item,index)=>{
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td>${item.name}</td>
+                <td>${item.author}</td>
+                <td>${item.score}</td>
+                <td>
+                    <button class="edit" onclick="openEdit(${index})">修改</button>
+                    <button class="del" onclick="deleteItem(${index})">删除</button>
+                </td>
+            `;
+            tableBody.appendChild(tr);
+        })
+    }
+
+    function clearForm(){
+        nameInput.value = "";
+        authorInput.value = "";
+        scoreInput.value = "";
+        errorTip.innerText = "";
+        editIndex = null;
+        btnAdd.innerText = "新增图书";
+        btnCancel.style.display = "none";
+    }
+
+    window.openEdit = function(idx){}
+    window.deleteItem = function(idx){}
+    btnAdd.onclick = function(){}
+    btnCancel.onclick = clearForm;
+
+    render();
+</script>
+</body>
+</html>
